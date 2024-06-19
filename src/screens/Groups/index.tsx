@@ -8,7 +8,7 @@ import { ListEmpty } from '../../components/ListEmpty';
 import { Container } from './styles';
 
 export function Groups() {
-  const [groups, setGroups] = useState<string[]>(['Galera do Ignite', 'Amigos'])
+  const [groups, setGroups] = useState<string[]>([])
 
   return (
     <Container>

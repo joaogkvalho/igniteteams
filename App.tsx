@@ -5,7 +5,8 @@ import theme from './src/theme';
 
 import { StatusBar } from 'react-native';
 import { Loading } from './src/components/Loading';
-import { Groups } from './src/screens/Groups';
+
+import { Routes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
@@ -17,7 +18,7 @@ export default function App() {
         backgroundColor="transparent" 
         translucent 
       />
-      { fontsLoaded ? <Groups /> : <Loading /> }
+      { fontsLoaded ? <Routes /> : <Loading /> }
     </ThemeProvider>
   );
 }

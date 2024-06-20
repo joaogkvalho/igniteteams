@@ -9,6 +9,7 @@ import { Header } from "../../components/Header";
 import { Highlight } from "../../components/Highlight";
 import { Input } from "../../components/Input";
 import { ListEmpty } from '../../components/ListEmpty';
+import { Loading } from '../../components/Loading';
 import { PlayerCard } from '../../components/PlayerCard';
 import { groupRemoveByName } from '../../storage/group/groupRemoveByName';
 import { PlayerStorageDTO } from '../../storage/player/PlayerStorageDTO';
@@ -23,6 +24,7 @@ type RouteParams = {
 }
 
 export function Players() {
+    const [isLoading, setIsLoading] = useState(true)
     const [team, setTeam] = useState('Time A')
     const [newPlayerName, setNewPlayerName] = useState('')
     const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
@@ -54,6 +56,7 @@ export function Players() {
         } catch(error: any) {
             if(error instanceof AppError) {
                 Alert.alert("Nova pessoa", error.message)
+                setNewPlayerName('')
             } else {
                 console.log(error)
                 Alert.alert("Nova pessoa", "Não foi possível adicionar ")
@@ -63,11 +66,15 @@ export function Players() {
 
     async function fetchPlayersByTeam() {
         try {
+            setIsLoading(true)
+
             const playersByTeam = await playersGetByGroupAndTeam(group, team)
             setPlayers(playersByTeam)
         } catch(error: any) {
             console.log(error)
             Alert.alert('Pessoas', 'Não foi possível carregar as pessoas filtradas do time selecionado.')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -150,7 +157,8 @@ export function Players() {
                 <NumberOfPlayers>{players.length}</NumberOfPlayers>
             </HeaderList>
 
-            <FlatList
+           {isLoading ? <Loading /> : (
+             <FlatList
                 data={players}
                 keyExtractor={(item) => item.name}
                 renderItem={({ item }) => (
@@ -169,7 +177,8 @@ export function Players() {
                     { paddingBottom: 100 },
                     players.length === 0 && { flex: 1 }
                 ]}
-            />
+                />
+           )}
 
             <Button 
                 title="Remover turma" 
